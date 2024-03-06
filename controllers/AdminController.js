@@ -382,16 +382,18 @@ module.exports.assign_order_post = async (req, res) => {
   const order = await Order.findById(orderId);
   const traveler = await Traveler.findById(travelerId);
   if (!traveler.active) {
-    return res
-      .status(400)
-      .json({ message: "Traveler has yet to provide Ticket" });
+    traveler.active = true;
+    // return res
+    //   .status(400)
+    //   .json({ message: "Traveler has yet to provide Ticket" });
   }
   if (order && traveler && traveler.active == true && !traveler.revoked) {
     try {
       if (order.cost == null) {
-        return res
-          .status(400)
-          .send("Please assign a cost to this order before assigning it");
+        order.cost = Math.random(10, 60);
+        // return res
+        //   .status(400)
+        //   .send("Please assign a cost to this order before assigning it");
       }
       order.traveler = travelerId;
       order.waiting_resp = true;

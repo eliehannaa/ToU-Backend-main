@@ -28,7 +28,7 @@ mongoose.connect(
 // mongoose.connect("mongodb+srv://vickenk8:lF4PbJg2PKGljdDM@cluster0.3zxbi6j.mongodb.net/test", {useNewUrlParser: true, useUnifiedTopology: true});
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "exp://192.168.1.18:19001/");
+  res.setHeader("Access-Control-Allow-Origin", "exp://192.168.1.20:19001/");
   // res.setHeader("Access-Control-Allow-Origin", "exp://10.21.158.37:19001/");
 
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
