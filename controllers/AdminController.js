@@ -13,21 +13,21 @@ const rs = require("randomstring");
 let transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "donotreply.tou@gmail.com", // your email address
+    user: "donotreply.tou@gmail.com", // ToU email address
     pass: "xwbm qwxy rnzv brps", // your app password
   },
 });
 let transporter1 = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "donotreply.tou@gmail.com", // your email address
+    user: "donotreply.tou@gmail.com", // ToU email address
     pass: "xwbm qwxy rnzv brps", // your app password
   },
 });
 
 const sendProofEmailApproved = async (email, name, lastname) => {
   let mailOptions = {
-    from: "donotreply.tou@gmail.com", // your email address
+    from: "donotreply.tou@gmail.com", // ToU email address
     to: email, // recipient's email address
     subject: "ToU: Valid Proof",
     text:
@@ -46,7 +46,6 @@ const sendProofEmailApproved = async (email, name, lastname) => {
         reject(error);
       } else {
         console.log("Email sent: " + info.response);
-        console.log(link);
         resolve();
       }
     });
@@ -55,7 +54,7 @@ const sendProofEmailApproved = async (email, name, lastname) => {
 
 const send2to3EmailClient = async (email, name, lastname, pname) => {
   let mailOptions = {
-    from: "donotreply.tou@gmail.com", // your email address
+    from: "donotreply.tou@gmail.com", // ToU email address
     to: email, // recipient's email address
     subject: "ToU: Order rejected",
     text:
@@ -76,7 +75,6 @@ const send2to3EmailClient = async (email, name, lastname, pname) => {
         reject(error);
       } else {
         console.log("Email sent: " + info.response);
-        console.log(link);
         resolve();
       }
     });
@@ -85,7 +83,7 @@ const send2to3EmailClient = async (email, name, lastname, pname) => {
 
 const sendAssignmentEmail = async (email, name, lastname) => {
   let mailOptions = {
-    from: "donotreply.tou@gmail.com", // your email address
+    from: "donotreply.tou@gmail.com", // ToU email address
     to: email, // recipient's email address
     subject: "ToU: New Order",
     text:
@@ -94,7 +92,7 @@ const sendAssignmentEmail = async (email, name, lastname) => {
       " " +
       lastname +
       ",\n\n" +
-      "This email has been sent to let you know that you have been assigned a new order.\n\nPlease make sure to accept or reject the order as soon as possible" +
+      "This email has been sent to let you know that you have been assigned a new order.\n\nPlease make sure to accept or reject the order as soon as possible\n" +
       "Best regards,\n",
   };
   await new Promise((resolve, reject) => {
@@ -104,7 +102,6 @@ const sendAssignmentEmail = async (email, name, lastname) => {
         reject(error);
       } else {
         console.log("Email sent: " + info.response);
-        console.log(link);
         resolve();
       }
     });
@@ -113,7 +110,7 @@ const sendAssignmentEmail = async (email, name, lastname) => {
 
 const sendProofEmailRejected = async (email, name, lastname) => {
   let mailOptions = {
-    from: "donotreply.tou@gmail.com", // your email address
+    from: "donotreply.tou@gmail.com", // ToU email address
     to: email, // recipient's email address
     subject: "ToU: Valid Proof",
     text:
@@ -132,7 +129,6 @@ const sendProofEmailRejected = async (email, name, lastname) => {
         reject(error);
       } else {
         console.log("Email sent: " + info.response);
-        console.log(link);
         resolve();
       }
     });
@@ -141,7 +137,7 @@ const sendProofEmailRejected = async (email, name, lastname) => {
 
 const sendOrderRejectionEmail = async (email, name, lastname, pname) => {
   let mailOptions = {
-    from: "donotreply.tou@gmail.com", // your email address
+    from: "donotreply.tou@gmail.com", // ToU email address
     to: email, // recipient's email address
     subject: "ToU: Order rejected",
     text:
@@ -162,7 +158,6 @@ const sendOrderRejectionEmail = async (email, name, lastname, pname) => {
         reject(error);
       } else {
         console.log("Email sent: " + info.response);
-        console.log(link);
         resolve();
       }
     });
@@ -185,7 +180,7 @@ const sendOrderAcceptEmail = async (
   const token = jwt.sign(payload, secret, { expiresIn: "31d" });
   const link = "http://localhost:5000/confirmorder/" + token + "/" + orderid;
   let mailOptions = {
-    from: "donotreply.tou@gmail.com", // your email address
+    from: "donotreply.tou@gmail.com", // ToU email address
     to: email, // recipient's email address
     subject: "ToU: Order Accepted",
     text:
@@ -639,12 +634,16 @@ module.exports.setTestimonial_post = async (req, res) => {
 
 module.exports.markSentOut = async (req, res) => {
   try {
+    console.log("markSentOut");
     const orderid = req.params.orderid;
+    console.log(orderid);
     const order = await Order.findById(orderid);
     if (order) {
       if (order.status == 5) {
+        console.log("setting status to 6");
         order.status = 6;
         await order.save();
+        console.log("after saving");
       } else {
         return res
           .status(400)
@@ -674,7 +673,7 @@ module.exports.acceptTraveler_post = async (req, res) => {
     trav.password = await bcrypt.hash(password, salt);
     await trav.save();
     let mailOptions = {
-      from: "donotreply.tou@gmail.com", // your email address
+      from: "donotreply.tou@gmail.com", // ToU email address
       to: trav.email, // recipient's email address
       subject: "ToU Traveler Acceptance",
       text:
@@ -712,7 +711,7 @@ module.exports.rejectTraveler_post = async (req, res) => {
     trav.reviewed = true;
     await trav.save();
     let mailOptions = {
-      from: "donotreply.tou.lebanon@outlook.com", // your email address
+      from: "donotreply.tou.lebanon@outlook.com", // ToU email address
       to: trav.email, // recipient's email address
       subject: "ToU Traveler Rejection",
       text:
@@ -736,4 +735,9 @@ module.exports.rejectTraveler_post = async (req, res) => {
       .status(200)
       .json({ message: "Traveler has been successfully rejected." });
   }
+};
+module.exports.getOrderById = async (req, res) => {
+  const id = req.params.id;
+  const order = await Order.findById(id);
+  res.send(order);
 };

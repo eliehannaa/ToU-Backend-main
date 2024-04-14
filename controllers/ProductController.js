@@ -11,14 +11,14 @@ const { copy } = require("../routes/AdminRoute");
 let transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "donotreply.tou@gmail.com", // your email address
+    user: "donotreply.tou@gmail.com", // ToU email address
     pass: "xwbm qwxy rnzv brps", // your app password
   },
 });
 
 const sendDecisionEmail = (email, name, lastname, title, result) => {
   let mailOptions = {
-    from: "donotreply.tou@gmail.com", // your email address
+    from: "donotreply.tou@gmail.com", // ToU email address
     to: email, // recipient's email address
     subject: "ToU: Email Confirmation",
     text:
@@ -360,10 +360,12 @@ module.exports.productrequest_post = async (req, res) => {
   try {
     if (product) {
       //if the product already exists, enter this block
+      console.log("The product already exists in the db...");
       const productId = product._id;
       const copyorder = await Order.findOne({ item: productId });
       if (copyorder.cost) {
         //checking if already existing product has a cost set to it.
+        console.log("The product has a cost already set to it...");
         const order = new Order({
           client: req.userId,
           item: product._id,
@@ -388,6 +390,7 @@ module.exports.productrequest_post = async (req, res) => {
         });
       } else {
         //If product copy does not have an existing cost this block will be triggered
+        console.log("The product has no cost set to it...");
         const order = new Order({
           client: req.userId,
           item: product._id,
@@ -409,11 +412,14 @@ module.exports.productrequest_post = async (req, res) => {
       //Product does not exist in the database
       if (data.price == undefined || data.price == null || data.price == "") {
         //If Product has no price
-        return res
-          .status(406)
-          .json({ message: "Product is Out of stock", token: newNAT }); //Then it means that product is out of stock
+        console.log("The product has no price...");
+        data.price = 100;
+        // return res
+        //   .status(406)
+        //   .json({ message: "Product is Out of stock", token: newNAT }); //Then it means that product is out of stock
       }
       console.log("The product is new to the db...");
+      console.log(data);
       const newProduct = new Product({
         title: data.title,
         asin: data.asin,

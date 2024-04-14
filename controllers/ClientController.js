@@ -14,14 +14,14 @@ const ContactForm = require("../models/Contact");
 let transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "donotreply.tou@gmail.com", // your email address
+    user: "donotreply.tou@gmail.com", // ToU email address
     pass: "xwbm qwxy rnzv brps", // your app password
   },
 });
 
 const sendCompletiontoTraveler = async (email, name, lastname, pname) => {
   let mailOptions = {
-    from: "donotreply.tou@gmail.com", // your email address
+    from: "donotreply.tou@gmail.com", // ToU email address
     to: email, // recipient's email address
     subject: "ToU: Order Completed!",
     text:
@@ -430,7 +430,7 @@ module.exports.submitSupportForm = async (req, res) => {
     if (!client) {
       const trav = await Traveler.findById(clientId);
       let mailOptions = {
-        from: "donotreply.tou@gmail.com", // your email address
+        from: "donotreply.tou@gmail.com", // ToU email address
         to: "tou.lebanon@gmail.com", // recipient's email address
         subject: req.body.subject,
         text:
@@ -459,7 +459,7 @@ module.exports.submitSupportForm = async (req, res) => {
         .send({ message: "Successfully Submitted Support Form", token });
     } else {
       let mailOptions = {
-        from: "donotreply.tou@gmail.com", // your email address
+        from: "donotreply.tou@gmail.com", // ToU email address
         to: "tou.lebanon@gmail.com", // recipient's email address
         subject: req.body.subject,
         text:

@@ -81,6 +81,6 @@ router.post(
 
 router.post("/support", requireAuth, clientController.submitSupportForm);
 
-router.get("/testimonials", LandingpageController.testimonials_get);
+router.get("/testimonials", LandingpageController.getAllFeedback);
 
 module.exports = router;

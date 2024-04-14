@@ -107,6 +107,7 @@ router.get(
   "/admin/home/travelers/actvietravelers",
   adminController.getActiveTravelers_get
 );
+router.get("/admin/home/order/:id", adminController.getOrderById);
 
 router.post(
   "/admin/home/activeorders/:orderid/markassentout",

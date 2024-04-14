@@ -26,7 +26,7 @@ const s3 = new aws.S3();
 let transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "donotreply.tou@gmail.com", // your email address
+    user: "donotreply.tou@gmail.com", // ToU email address
     pass: "xwbm qwxy rnzv brps", // your app password
   },
 });
@@ -40,7 +40,7 @@ const sendAssignedEmailClient = async (
   d2
 ) => {
   let mailOptions = {
-    from: "donotreply.tou@gmail.com", // your email address
+    from: "donotreply.tou@gmail.com", // ToU email address
     to: email, // recipient's email address
     subject: "ToU: Order Assigned!",
     text:
@@ -104,8 +104,16 @@ module.exports.accept_order = async (req, res) => {
       return;
     }
     console.log("hi2");
+    console.log("order.status :", order.status);
+    console.log("order.waiting_resp :", order.waiting_resp);
+    console.log(
+      "traveler.new_orders.includes(orderId) :",
+      traveler.new_orders.includes(orderId)
+    );
+    console.log("order.client_confirmed :", order.client_confirmed);
+    console.log("traveler.ticket :", traveler.ticket);
     if (
-      order.status == 2 &&
+      (order.status == 2 || order.status == 1) &&
       order.waiting_resp == true &&
       traveler.new_orders.includes(orderId) &&
       order.client_confirmed
@@ -136,7 +144,7 @@ module.exports.accept_order = async (req, res) => {
 
       const ticketId = traveler.ticket;
       const ticket = await Ticket.findById(ticketId);
-      let date_string = ticket.departure.toUpperCase();
+      let date_string = "16Nov";
       let date_format = "DDMMM";
       let date = moment(date_string, date_format);
       let new_date = date.add(7, "days");
@@ -221,7 +229,7 @@ module.exports.cancel_flight = async (req, res) => {
       order.estimated_arrival = "";
       await order.save();
       let mailOptions = {
-        from: "donotreply.tou@gmail.com", // your email address
+        from: "donotreply.tou@gmail.com", // ToU email address
         to: trav.email, // recipient's email address
         subject: "ToU: Order back to pending",
         text:
@@ -256,7 +264,7 @@ module.exports.cancel_flight = async (req, res) => {
       order.pickup_location = "";
       await order.save();
       let mailOptions = {
-        from: "donotreply.tou@gmail.com", // your email address
+        from: "donotreply.tou@gmail.com", // ToU email address
         to: trav.email, // recipient's email address
         subject: "ToU: Order back to pending",
         text:
@@ -303,6 +311,7 @@ The function then updates the provided_pickup field of the traveler object with 
 in the request body. Finally, the function saves the updated traveler object to the database and sends an HTTP 
 response with a status code of 200 and a message indicating that the pickup location has been successfully provided.*/
 module.exports.providePickup_post = async (req, res) => {
+  console.log("provide pickup");
   const travelerId = req.userId;
   const token = req.nat;
   const traveler = await Traveler.findById(travelerId);
@@ -387,7 +396,7 @@ module.exports.uploadProof_post = async (req, res) => {
       const orderId = req.params.orderid;
       const order = await Order.findById(orderId);
 
-      const filename = req.file.key;
+      const filename = "req.file.key";
 
       order.proof = filename;
       order.save().then(console.log(order));
@@ -395,13 +404,14 @@ module.exports.uploadProof_post = async (req, res) => {
       res.send({ message: "Done", token });
     });
   } catch (err) {
+    const token = req.nat;
     res.status(400).send({ error: err.message, token });
   }
 };
 
 const sendOnTheWayEmail = async (email, name, lastname, pname) => {
   let mailOptions = {
-    from: "donotreply.tou@gmail.com", // your email address
+    from: "donotreply.tou@gmail.com", // ToU email address
     to: email, // recipient's email address
     subject: "ToU: Your Order is on its way!",
     text:
@@ -473,7 +483,7 @@ module.exports.markshipped = async (req, res) => {
 
 const sendArrivedEmail = async (email, name, lastname, pname) => {
   let mailOptions = {
-    from: "donotreply.tou@gmail.com", // your email address
+    from: "donotreply.tou@gmail.com", // ToU email address
     to: email, // recipient's email address
     subject: "ToU: Your Order is in Lebanon!",
     text:

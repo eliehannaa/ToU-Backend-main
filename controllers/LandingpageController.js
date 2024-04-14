@@ -16,3 +16,8 @@ module.exports.testimonials_get = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+module.exports.getAllFeedback = async (req, res) => {
+  console.log("fetching list of all clients...");
+  const testimonials = await Feedback.find();
+  res.status(200).json({ testimonials });
+};

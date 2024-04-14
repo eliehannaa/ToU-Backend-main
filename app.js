@@ -1,18 +1,14 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const authRoutes = require("./routes/AuthRoute");
-// const productRoutes = require('./routes/productRoute');
 const TravRoutes = require("./routes/TravelerRoute");
 const AdminRoute = require("./routes/AdminRoute");
 const ClientRoute = require("./routes/ClientRoute");
 const cookieParser = require("cookie-parser");
 const { requireAuth, checkUser } = require("./middleware/Middleware");
 const cors = require("cors");
-// const bodyParser = require('body-parser');
 const Admin = require("./models/Admin");
 const app = express();
-// app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(bodyParser.json());
 
 // middleware
 app.use(express.static("public"));
@@ -25,10 +21,9 @@ mongoose.connect(
   "mongodb+srv://eliehanna:eliehanna@atlascluster.brleq7g.mongodb.net/test",
   { useNewUrlParser: true, useUnifiedTopology: true }
 );
-// mongoose.connect("mongodb+srv://vickenk8:lF4PbJg2PKGljdDM@cluster0.3zxbi6j.mongodb.net/test", {useNewUrlParser: true, useUnifiedTopology: true});
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "exp://192.168.1.20:19001/");
+  res.setHeader("Access-Control-Allow-Origin", "exp://192.168.1.21:19001/");
   // res.setHeader("Access-Control-Allow-Origin", "exp://10.21.158.37:19001/");
 
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
@@ -44,6 +39,7 @@ app.use(TravRoutes);
 app.use(AdminRoute);
 app.use(ClientRoute);
 
+//to create a new admin:
 // const newAdmin = new Admin({
 //   username: "admin",
 //   password: "admin",

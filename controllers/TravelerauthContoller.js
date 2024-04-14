@@ -8,7 +8,7 @@ const User = require("../models/User");
 let transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "donotreply.tou@gmail.com", // your email address
+    user: "donotreply.tou@gmail.com", // ToU email address
     pass: "xwbm qwxy rnzv brps", // your app password
   },
 });
@@ -116,7 +116,7 @@ module.exports.tsignup_post = async (req, res) => {
       await traveler.save();
       console.log("TEST5");
       let mailOptions = {
-        from: "donotreply.tou@gmail.com", // your email address
+        from: "donotreply.tou@gmail.com", // ToU email address
         to: email, // recipient's email address
         subject: "ToU Traveler Registration",
         text:

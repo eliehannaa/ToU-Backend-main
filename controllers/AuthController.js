@@ -10,7 +10,7 @@ require("dotenv").config();
 let transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "donotreply.tou@gmail.com", // your email address
+    user: "donotreply.tou@gmail.com", // ToU email address
     pass: "xwbm qwxy rnzv brps", // your app password
   },
 });
@@ -67,7 +67,7 @@ const createEmailLink = (id) => {
 
 const sendEmail = async (email, name, lastname, link) => {
   let mailOptions = {
-    from: "donotreply.tou@gmail.com", // your email address
+    from: "donotreply.tou@gmail.com", // ToU email address
     to: email, // recipient's email address
     subject: "ToU: Email Confirmation",
     text:
