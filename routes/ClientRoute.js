@@ -7,7 +7,7 @@ const { requireAuth, checkUser } = require("../middleware/Middleware");
 
 const router = Router();
 router.get("/client/home/searchproduct", requireAuth, (req, res, next) => {
-  // You don't need any functionality here, so just call next()
+  //don't need any functionality here, so just call next()
   next();
 });
 router.post("/client/home/searchproduct", productController.productsearch_post);

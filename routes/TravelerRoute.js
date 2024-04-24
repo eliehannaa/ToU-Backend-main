@@ -10,16 +10,6 @@ const {
 
 const router = Router();
 
-// router.get('/traveler/:id/home')
-
-// router.get('/traveler/:id/new-orders')
-
-// router.get('/traveler/:id/new-orders/:order-id/accept')
-//router.get('/traveler/home/neworders/:orderid/accept', requireAuth,travController.accept_order_GET);
-
-// router.get('/traveler/:id/active-orders')
-// router.get('/traveler/:id/active-orders/:order-id')
-
 router.get(
   "/traveler/home/pendingorders",
   requireAuth,
@@ -66,7 +56,5 @@ router.post(
   requireAuth,
   travController.markarrived
 );
-// router.get('/traveler/:id/completed-orders')
-// router.get('/traveler/:id/completed-orders/:order-id')
 
 module.exports = router;

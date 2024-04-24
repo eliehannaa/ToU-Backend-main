@@ -1,8 +1,6 @@
 const Ticket = require("../models/Ticket");
 const pdf = require("pdf-parse");
-// const aws = require("aws-sdk");
 const multer = require("multer");
-// const multerS3 = require("multer-s3");
 const storage1 = multer.memoryStorage();
 const upload = multer({ storage: storage1 });
 const Traveler = require("../models/Traveler");
@@ -16,27 +14,6 @@ let transporter = nodemailer.createTransport({
     pass: "xwbm qwxy rnzv brps", // your app password
   },
 });
-
-// aws.config.update({
-//   secretAccessKey: process.env.ACCESS_SECRET,
-//   accessKeyId: process.env.ACCESS_KEY,
-//   region: process.env.REGION,
-// });
-
-// const BUCKET = process.env.BUCKET;
-// const s3 = new aws.S3();
-
-// const upload1 = multer({
-//   storage: multerS3({
-//     bucket: BUCKET,
-//     s3: s3,
-//     acl: "public-read",
-//     key: (req, file, cb) => {
-//       const filename = req.userId + " _ " + Date.now() + " _ ticket.pdf";
-//       cb(null, filename);
-//     },
-//   }),
-// });
 
 /*The `uploadTicket_post` function first extracts the `traveler`, `token` and `fileData` from the HTTP request. 
 It then creates a new `Ticket` object in the database with the `traveler` ID and assigns it to the `ticket` variable. 
@@ -60,7 +37,6 @@ module.exports.uploadTicket_post = async (req, res) => {
         const regex = /\d{2}[A-Z][a-z]{2}/g;
         const flightRegex = /ME\d{4}/g;
         const nameRegex = /number\s+(.*?)\s+(Ms|Mr)\b/g;
-        // const fileData = req.file.buffer;
         const body = {
           pdfFile: "ticket.pdf",
           departure: "16Nov 07:15",
@@ -69,8 +45,6 @@ module.exports.uploadTicket_post = async (req, res) => {
           return_flight: "ME0218",
           ticket_name: "Jane Doe",
         };
-
-        // const text = pdfData.text;
         const dates = true;
         if (dates) {
           ticket.departure = body.departure;
@@ -132,36 +106,12 @@ module.exports.uploadTicket_post = async (req, res) => {
               reject(error);
             } else {
               console.log("Email sent: " + info.response);
-              console.log(link);
               resolve();
             }
           });
         });
       });
-      // const filename = req.file.key;
       res.status(200).send({ ticket, token });
-
-      // upload1.single("file")(req, res, async (err) => {
-      //   if (ticket.valid == true) {
-      //     try {
-      //       if (err) {
-      //         console.log(err);
-      //         res.status(400).send({ error: err.message });
-      //         return;
-      //       }
-      //       const filename = req.file.key;
-      //       ticket.pdf_file = filename;
-      //       await ticket.save();
-      //       trav.ticket = ticket._id;
-      //       await trav.save();
-      //       res.status(200).send({ ticket, token });
-      //     } catch (err) {
-      //       console.log(err);
-      //       res.status(400).send({ error: err.message, token });
-      //       return;
-      //     }
-      //   }
-      // });
     } catch (err) {
       console.log(err);
       res.status(400).send({ error: err.message, token });

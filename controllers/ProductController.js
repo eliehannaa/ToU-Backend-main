@@ -38,7 +38,6 @@ const sendDecisionEmail = (email, name, lastname, title, result) => {
       console.log(error);
     } else {
       console.log("Email sent: " + info.response);
-      console.log(link);
     }
   });
 };

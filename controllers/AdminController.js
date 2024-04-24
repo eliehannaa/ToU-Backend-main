@@ -211,36 +211,19 @@ const sendOrderAcceptEmail = async (
   });
 };
 
-//since mongodb doesn't support pdfs, we need to upload them to aws
-const aws = require("aws-sdk");
-const multer = require("multer");
-const multerS3 = require("multer-s3");
-
-aws.config.update({
-  secretAccessKey: process.env.ACCESS_SECRET,
-  accessKeyId: process.env.ACCESS_KEY,
-  region: process.env.REGION,
-});
-
-const BUCKET = process.env.BUCKET;
-const s3 = new aws.S3();
-
 module.exports.getTravelers_get = async (req, res) => {
-  // const token = req.nat
   console.log("hi");
   const travelers = await Traveler.find({ approved: true });
   res.status(200).json({ travelers });
 };
 
 module.exports.getNewTravelers_get = async (req, res) => {
-  // const token = req.nat
   console.log("We are getting all new travelers");
   const travelers = await Traveler.find({ approved: false });
   res.status(200).json({ travelers });
 };
 
 module.exports.postApproveTraveler = async (req, res) => {
-  // const token = req.nat
   console.log("");
   const travelers = await Traveler.find({ approved: false });
   res.status(200).json({ travelers });
@@ -264,9 +247,6 @@ module.exports.download_proof_get = async (req, res) => {
         return;
       }
       console.log(filename);
-      const x = await s3.getObject({ Bucket: BUCKET, Key: filename }).promise();
-
-      res.send(x.Body);
     } catch (err) {
       console.log(err);
     }

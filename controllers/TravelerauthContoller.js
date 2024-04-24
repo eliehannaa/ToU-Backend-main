@@ -3,7 +3,6 @@ const Traveler = require("../models/Traveler");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const User = require("../models/User");
-// const bodyParser = require('body-parser');
 
 let transporter = nodemailer.createTransport({
   service: "gmail",
@@ -13,18 +12,10 @@ let transporter = nodemailer.createTransport({
   },
 });
 
-const aws = require("aws-sdk");
 const multer = require("multer");
 const multerS3 = require("multer-s3");
 
-aws.config.update({
-  secretAccessKey: process.env.ACCESS_SECRET,
-  accessKeyId: process.env.ACCESS_KEY,
-  region: process.env.REGION,
-});
-
 const BUCKET = process.env.BUCKET;
-const s3 = new aws.S3();
 
 /*The `tsignup_post` function first logs the body of the HTTP request to the console.
 It then creates a new instance of the `multer` middleware to handle file uploads, specifying that files should be stored in a specific S3 bucket and assigning 
@@ -59,33 +50,15 @@ module.exports.tsignup_post = async (req, res) => {
       return res.status(400).send({ error: err.message });
     }
     try {
-      //   console.log(req);
-      //   console.log("BT");
-      //   console.log(req.body);
-      //   console.log("EEE");
-      //   console.log(req.body.otherData);
       console.log("TEST");
-      //   console.log(JSON.stringify(req.body.otherData));
-      //   const data = await JSON.parse(req.body.otherData);
-      // Accessing the "otherData" value from the _parts array
       const cvObject = req.body._parts.find(([key]) => key === "cv")[1];
       const idObject = req.body._parts.find(([key]) => key === "id")[1];
-      // const cvObject = JSON.parse(cvString);
-      // console.log(cvObject.data);
       const otherDataString = req.body._parts.find(
         ([key]) => key === "otherData"
       )[1];
 
       // Parsing the JSON string to get an object
       const otherDataObject = JSON.parse(otherDataString);
-
-      //   // Accessing the "name" and "lastname" properties
-      //   const name1 = otherDataObject.name;
-      //   const lastname1 = otherDataObject.lastname;
-
-      //   console.log("name1:"); // Output: JJee
-      //   console.log(name1); // Output: JJee
-      //   console.log(lastname1); // Output: DFrt
       const data = {
         name: otherDataObject.name,
         lastname: otherDataObject.lastname,
@@ -140,7 +113,6 @@ module.exports.tsignup_post = async (req, res) => {
           } else {
             console.log("Email sent: " + info.response);
             console.log("TEST9");
-            console.log(link);
             resolve();
           }
         });

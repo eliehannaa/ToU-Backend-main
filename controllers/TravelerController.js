@@ -10,18 +10,14 @@ const request = require("request-promise");
 const { requireAuth, checkUser } = require("../middleware/Middleware");
 const nodemailer = require("nodemailer");
 require("dotenv").config();
-const aws = require("aws-sdk");
 const multer = require("multer");
 const multerS3 = require("multer-s3");
 const moment = require("moment");
+const aws = require("aws-sdk");
 
-aws.config.update({
-  secretAccessKey: process.env.ACCESS_SECRET,
-  accessKeyId: process.env.ACCESS_KEY,
-  region: process.env.REGION,
-});
-const BUCKET = process.env.BUCKET;
 const s3 = new aws.S3();
+
+const BUCKET = process.env.BUCKET;
 
 let transporter = nodemailer.createTransport({
   service: "gmail",
@@ -64,7 +60,6 @@ const sendAssignedEmailClient = async (
         reject(error);
       } else {
         console.log("Email sent: " + info.response);
-        console.log(link);
         resolve();
       }
     });
@@ -230,7 +225,7 @@ module.exports.cancel_flight = async (req, res) => {
       await order.save();
       let mailOptions = {
         from: "donotreply.tou@gmail.com", // ToU email address
-        to: trav.email, // recipient's email address
+        to: traveler.email, // recipient's email address
         subject: "ToU: Order back to pending",
         text:
           "Dear " +
@@ -249,7 +244,6 @@ module.exports.cancel_flight = async (req, res) => {
             reject(error);
           } else {
             console.log("Email sent: " + info.response);
-            console.log(link);
             resolve();
           }
         });
@@ -265,7 +259,7 @@ module.exports.cancel_flight = async (req, res) => {
       await order.save();
       let mailOptions = {
         from: "donotreply.tou@gmail.com", // ToU email address
-        to: trav.email, // recipient's email address
+        to: traveler.email, // recipient's email address
         subject: "ToU: Order back to pending",
         text:
           "Dear " +
@@ -284,7 +278,6 @@ module.exports.cancel_flight = async (req, res) => {
             reject(error);
           } else {
             console.log("Email sent: " + info.response);
-            console.log(link);
             resolve();
           }
         });
@@ -338,6 +331,7 @@ The function then extracts the orderId from the HTTP request and retrieves the c
     It updates the order's receipt field with the filename of the uploaded file and saves the updated order object to the database. 
     Finally, the function sends an HTTP response with a message indicating that the upload is complete.*/
 module.exports.uploadReceipt_post = async (req, res) => {
+  const token = req.nat;
   upload1.single("file")(req, res, async (err) => {
     if (err) {
       console.log(err);
@@ -431,7 +425,6 @@ const sendOnTheWayEmail = async (email, name, lastname, pname) => {
         reject(error);
       } else {
         console.log("Email sent: " + info.response);
-        console.log(link);
         resolve();
       }
     });
@@ -503,7 +496,6 @@ const sendArrivedEmail = async (email, name, lastname, pname) => {
         reject(error);
       } else {
         console.log("Email sent: " + info.response);
-        console.log(link);
         resolve();
       }
     });
@@ -621,6 +613,7 @@ If the user is neither a User nor a Traveler, the function returns a JSON object
 If an error occurs during the execution of this function, the catch block logs the error and sends an HTTP response with a status 
 code of 400 and a message indicating that a server error has occurred.*/
 module.exports.splashScreen_get = async (req, res) => {
+  const token = req.nat;
   try {
     const token = req.nat;
     const type = req.userType;
@@ -672,7 +665,7 @@ module.exports.editProfile = async (req, res) => {
       res.status(500).send(error);
     }
   } else {
-    res.status(500).send(error, token);
+    res.status(500).send("error", token);
   }
 };
 
